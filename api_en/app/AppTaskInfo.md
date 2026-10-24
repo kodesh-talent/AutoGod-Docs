@@ -1,0 +1,327 @@
+# AppTaskInfo - 任务信息
+
+- 更新时间:2026-10-22 10:55:45
+
+> 最近任务（最近用过的 App）信息对象。
+> 
+> 它记录了“最近任务列表”里某一个 App 的情况：叫什么名字、包名是什么、最后一次是什么时候用的。
+> 通常不用自己创建，而是用 $app.lsRecent() 列出最近任务后，从列表里取一个得到。
+> 和 AppInfo 很像，区别是它多了“最后使用时间”，而且很多字段同时有英文、中文两个名字，用哪个都行。
+
+
+
+```javascript
+var tasks = $app.lsRecent();       //列出最近用过的 App
+if (tasks.size() > 0) {
+    var task = tasks.get(0);      //取最近一个
+    log("名字：" + task.appName);   //读它的名称
+    log("最后使用：" + task.lastUseTime);
+}
+```
+
+
+
+
+### const {String} appName;
+
+> 保存应用名称。
+> 属性类型：String。应用显示名称，可能与其他应用重名。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.appName; //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### const {String} pkgName;
+
+> 保存包名。
+> 属性类型：String。应用的包名，用于区分应用；它不是桌面显示名称。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.pkgName; //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### const {String} lastUseTime;
+
+> 保存最后使用时间。
+> 属性类型：String。最后使用时间的日期文字，当前查询实现使用 yyyy-MM-dd HH:mm:ss 格式，不是“几小时前”的相对描述。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.lastUseTime; //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### const {long} lastUsedTime;
+
+> 保存最后使用的时间。
+> 属性类型：long。最后使用时刻的毫秒时间戳，以协调世界时一九七零年一月一日零点为基准，不是秒数。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.lastUsedTime; //读取当前说明的属性或方法
+        log("毫秒时间戳：" + value);
+        log("按当前设备时区显示：" + $date.format(value, "yyyy-MM-dd HH:mm:ss")); //演示时间戳的进一步使用
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### const {ApplicationInfo} info;
+
+> 保存原生信息。
+> 属性类型：ApplicationInfo。安卓系统的原生应用信息对象，未填入时为 null。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> ApplicationInfo 是宿主原生对象，不是本类；原生字段仍使用英文名称，例如 packageName。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.info; //读取当前说明的属性或方法
+        if (value != null) {
+            log("原生包名：" + value.packageName); //安卓原生字段保留英文名称
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### getLastUsedTime()
+
+> 读取最后使用的时间。
+> 输入：无参数。输出：long。最后使用时刻的毫秒时间戳，以协调世界时一九七零年一月一日零点为基准，不是秒数。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 lastUsedTime 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+- 返回 : {long} 最后使用时刻的毫秒时间戳，以协调世界时一九七零年一月一日零点为基准，不是秒数。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.getLastUsedTime(); //读取当前说明的属性或方法
+        log("毫秒时间戳：" + value);
+        log("按当前设备时区显示：" + $date.format(value, "yyyy-MM-dd HH:mm:ss")); //演示时间戳的进一步使用
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### getAppName()
+
+> 读取应用名称。
+> 输入：无参数。输出：String。应用显示名称，可能与其他应用重名。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 appName 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+- 返回 : {String} 应用显示名称，可能与其他应用重名。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.getAppName(); //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### getPkgName()
+
+> 读取包名。
+> 输入：无参数。输出：String。应用的包名，用于区分应用；它不是桌面显示名称。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 pkgName 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+- 返回 : {String} 应用的包名，用于区分应用；它不是桌面显示名称。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.getPkgName(); //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### getLastUseTime()
+
+> 读取最后使用时间。
+> 输入：无参数。输出：String。最后使用时间的日期文字，当前查询实现使用 yyyy-MM-dd HH:mm:ss 格式，不是“几小时前”的相对描述。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 lastUseTime 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+- 返回 : {String} 最后使用时间的日期文字，当前查询实现使用 yyyy-MM-dd HH:mm:ss 格式，不是“几小时前”的相对描述。
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.getLastUseTime(); //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+
+### json()
+
+> 将这个结果对象转换为对象数据文本。
+> 输入：无参数。输出：String 文字；内部序列化失败时可能返回 null。
+> 返回的是文字，不是新的应用对象；同一对象的中英文字段都会参与序列化，图标或原生信息等复杂对象不保证总能完整序列化。
+> 先确认使用情况访问权限，再获取列表；没有记录时不要直接调用 get(0)。
+
+- 返回 : {String} 对象数据文本；序列化失败时可能为 null
+- 版本 : 1.7.0
+
+
+```javascript
+if ($app.hasUsagePermit()) {
+    var list = $app.lsRecent(); //取得宿主列表，不是普通脚本数组
+    if (list != null && list.size() > 0) {
+        var item = list.get(0); //索引零表示第一项
+        var value = item.json(); //读取当前说明的属性或方法
+        if (value != null) {
+            log("读取结果：" + value);
+        } else {
+            log("这一项没有可用值");
+        }
+    } else {
+        log("列表为空，不能直接读取第一项");
+    }
+} else {
+    log("请先授予使用情况访问权限，再重新查询");
+}
+```
+
+

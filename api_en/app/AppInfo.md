@@ -1,0 +1,260 @@
+# AppInfo - 应用信息
+
+- 更新时间:2026-10-22 10:55:45
+
+> 一个已安装应用的信息对象。
+> 
+> 它记录了手机上某个 App 的基本情况：叫什么名字、包名是什么、图标长什么样。
+> 通常不用自己创建，而是用 $app.ls() 列出所有已安装应用后，从列表里取一个得到。
+> 注意：很多属性同时有英文和中文两个名字（比如 appName 和 应用名称 是同一回事），用哪个都行。
+
+
+
+```javascript
+var list = $app.ls();            //列出手机上所有已安装应用
+if (list.size() > 0) {
+    var app = list.get(0);       //取第一个应用
+    log("名字：" + app.appName);   //读它的名称
+    log("包名：" + app.pkgName);   //读它的包名
+}
+```
+
+
+
+
+### const {String} appName;
+
+> 保存应用名称。
+> 属性类型：String。应用显示名称，可能与其他应用重名。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.appName; //读取当前说明的属性或方法
+    if (value != null) {
+        log("读取结果：" + value);
+    } else {
+        log("这一项没有可用值");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### const {String} pkgName;
+
+> 保存包名。
+> 属性类型：String。应用的包名，用于区分应用；它不是桌面显示名称。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.pkgName; //读取当前说明的属性或方法
+    if (value != null) {
+        log("读取结果：" + value);
+    } else {
+        log("这一项没有可用值");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### const {Image} icon;
+
+> 保存图标。
+> 属性类型：Image。应用图标的图片包装对象，加载失败时可以是 null。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 图标类型 Image 也有自己的脚本方法；示例继续读取宽高，单位为像素。使用图标前需确认不为空且未被其他代码回收。
+> 中英文图标字段通常指向同一张图片，回收其中一个引用会影响所有引用；本示例仅查看尺寸。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.icon; //读取当前说明的属性或方法
+    if (value != null) {
+        log("图标尺寸：" + value.getWidth() + " × " + value.getHeight()); //演示关联图片对象的方法
+    } else {
+        log("图标未加载成功");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### const {ApplicationInfo} info;
+
+> 保存原生信息。
+> 属性类型：ApplicationInfo。安卓系统的原生应用信息对象，未填入时为 null。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> ApplicationInfo 是宿主原生对象，不是本类；原生字段仍使用英文名称，例如 packageName。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.info; //读取当前说明的属性或方法
+    if (value != null) {
+        log("原生包名：" + value.packageName); //安卓原生字段保留英文名称
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### getAppName()
+
+> 读取应用名称。
+> 输入：无参数。输出：String。应用显示名称，可能与其他应用重名。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 appName 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+
+- 返回 : {String} 应用显示名称，可能与其他应用重名。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.getAppName(); //读取当前说明的属性或方法
+    if (value != null) {
+        log("读取结果：" + value);
+    } else {
+        log("这一项没有可用值");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### getPkgName()
+
+> 读取包名。
+> 输入：无参数。输出：String。应用的包名，用于区分应用；它不是桌面显示名称。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 pkgName 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 未填入时为 null；需要进行文字运算前先检查是否有值。
+
+- 返回 : {String} 应用的包名，用于区分应用；它不是桌面显示名称。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.getPkgName(); //读取当前说明的属性或方法
+    if (value != null) {
+        log("读取结果：" + value);
+    } else {
+        log("这一项没有可用值");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### getIcon()
+
+> 读取图标。
+> 输入：无参数。输出：Image。应用图标的图片包装对象，加载失败时可以是 null。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 icon 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> 图标类型 Image 也有自己的脚本方法；示例继续读取宽高，单位为像素。使用图标前需确认不为空且未被其他代码回收。
+> 中英文图标字段通常指向同一张图片，回收其中一个引用会影响所有引用；本示例仅查看尺寸。
+
+- 返回 : {Image} 应用图标的图片包装对象，加载失败时可以是 null。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.getIcon(); //读取当前说明的属性或方法
+    if (value != null) {
+        log("图标尺寸：" + value.getWidth() + " × " + value.getHeight()); //演示关联图片对象的方法
+    } else {
+        log("图标未加载成功");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### getInfo()
+
+> 读取原生信息。
+> 输入：无参数。输出：ApplicationInfo。安卓系统的原生应用信息对象，未填入时为 null。
+> 这是查询时取得的快照；读取属性或调用读取方法不会刷新系统数据。
+> 建议只读使用：直接赋值只改变本对象，不改变已安装应用，也不自动更新其他同义字段。
+> 此方法读取英文 info 字段；手动修改中文字段后，不应期望本方法返回值一起改变。
+> ApplicationInfo 是宿主原生对象，不是本类；原生字段仍使用英文名称，例如 packageName。
+
+- 返回 : {ApplicationInfo} 安卓系统的原生应用信息对象，未填入时为 null。
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.getInfo(); //读取当前说明的属性或方法
+    if (value != null) {
+        log("原生包名：" + value.packageName); //安卓原生字段保留英文名称
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
+### json()
+
+> 将这个结果对象转换为对象数据文本。
+> 输入：无参数。输出：String 文字；内部序列化失败时可能返回 null。
+> 返回的是文字，不是新的应用对象；同一对象的中英文字段都会参与序列化，图标或原生信息等复杂对象不保证总能完整序列化。
+
+- 返回 : {String} 对象数据文本；序列化失败时可能为 null
+- 版本 : 1.7.0
+
+
+```javascript
+var list = $app.ls(); //取得宿主列表，不是普通脚本数组
+if (list != null && list.size() > 0) {
+    var item = list.get(0); //索引零表示第一项
+    var value = item.json(); //读取当前说明的属性或方法
+    if (value != null) {
+        log("读取结果：" + value);
+    } else {
+        log("这一项没有可用值");
+    }
+} else {
+    log("列表为空，不能直接读取第一项");
+}
+```
+
+
